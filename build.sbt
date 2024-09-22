@@ -13,7 +13,9 @@ libraryDependencies ++= Seq(
   "org.apache.pekko" %% "pekko-stream" % "1.0.3",
   "org.apache.pekko" %% "pekko-http-spray-json" % "1.0.1",
   "org.slf4j" % "slf4j-simple" % "2.0.13",
-  "org.wvlet.airframe" %% "airframe" % "24.5.1" // Airframe DI
+  "org.wvlet.airframe" %% "airframe" % "24.5.1", // Airframe DI
+  "com.typesafe.slick" %% "slick" % "3.5.0", // Slick ORM
+  "mysql" % "mysql-connector-java" % "8.0.33" // MySQL Connector
 )
 
 resolvers += "Apache Pekko Repository" at "https://repository.apache.org/content/repositories/releases/"
