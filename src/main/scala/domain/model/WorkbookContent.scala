@@ -2,7 +2,8 @@ package domain.model
 
 final case class WorkbookContent(
     id: WorkbookContentId,
-    title: WorkbookContentName
+    title: WorkbookContentName,
+    workbookId: WorkbookId
 )
 
 final case class WorkbookContentId(value: Long) extends AnyVal with Id

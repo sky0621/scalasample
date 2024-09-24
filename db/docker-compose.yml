@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  mysqldb:
+    image: mysql:8.3
+    container_name: scalasamplecontainer
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: scalasamplelocal
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+      LANG: ja_JP.UTF-8
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - '4306:3306'
+    expose:
+      - 4306
+    platform: linux/arm64
