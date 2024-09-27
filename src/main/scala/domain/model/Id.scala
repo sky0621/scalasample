@@ -1,3 +1,3 @@
 package domain.model
 
-trait Id
+trait Id extends Any

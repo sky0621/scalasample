@@ -10,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class InStoreWorkbookRepository(db: Database)(implicit ec: ExecutionContext)
     extends WorkbookRepository {
 
-  override def findAll(): Future[Seq[Workbook]] = db.run()
+  override def findAll(): Future[Seq[Workbook]] = ???
 
   override def findById(id: WorkbookId): Future[Either[DomainError, Workbook]] =
     ???

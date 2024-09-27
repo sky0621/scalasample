@@ -1,17 +1,21 @@
 package infrastructure.repository.entity
 
-import domain.model.{Group, GroupId, GroupName}
+import domain.model.{GroupId, GroupName}
 import infrastructure.repository.entity.ImplicitColumnType._
 import slick.jdbc.MySQLProfile.api._
-import slick.lifted.{ProvenShape, Rep, Tag}
+import slick.lifted.Tag
 
-class Groups(tag: Tag) extends Table[Group](tag, "group") {
-  def id: Rep[GroupId] = column[GroupId]("id", O.PrimaryKey, O.AutoInc)
-  def name: Rep[GroupName] = column[GroupName]("name")
+final case class GroupRow(
+    id: GroupId,
+    name: GroupName
+)
 
-  def * : ProvenShape[Group] = (id, name) <> (Group.tupled, Group.unapply)
+class Groups(tag: Tag) extends Table[GroupRow](tag, "groups") {
+  def id = column[GroupId]("id", O.PrimaryKey, O.AutoInc)
+  def name = column[GroupName]("name")
+  def * = (id, name) <> (GroupRow.tupled, GroupRow.unapply)
 }
 
 object Groups {
-  val groups = TableQuery[Groups]
+  val query = TableQuery[Groups]
 }
