@@ -1,9 +1,7 @@
 package domain.model
 
-final case class Workbook(
-    id: WorkbookId,
-    contents: Seq[WorkbookContent],
-    deliveries: Seq[WorkbookDelivery]
+case class Workbook(
+    id: Long,
+    title: String,
+    deliveries: Seq[Delivery] = Seq.empty[Delivery]
 )
-
-final case class WorkbookId(value: Long) extends AnyVal with Id

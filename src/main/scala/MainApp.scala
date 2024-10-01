@@ -1,44 +1,29 @@
-import infrastructure.repository.InMemoryTodoRepository
-import interface.controller.TodoController
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.Materializer
-import usecase.{CreateTodoUseCase, GetTodoUseCase}
-import wvlet.airframe._
+import org.apache.pekko.http.scaladsl.Http
+
+import scala.util.{Failure, Success}
 
 object MainApp extends App {
-  implicit val system: ActorSystem = ActorSystem("TodoApp")
-  implicit val materializer: Materializer = Materializer(system)
+  implicit val system = ActorSystem("my-system")
+  implicit val ec = system.dispatcher
 
-  val design = newDesign
-    .bind[ActorSystem]
-    .toInstance(system)
-    .bind[Materializer]
-    .toInstance(materializer)
-    .add(InMemoryTodoRepository.design)
-    .add(GetTodoUseCase.design)
-    .add(CreateTodoUseCase.design)
-    .add(TodoController.design)
+  val design = Module.design
 
-  design.build[Server] { server =>
-    server.start()
-  }
-}
-
-class Server(todoController: TodoController)(implicit
-    system: ActorSystem,
-    materializer: Materializer
-) {
-  import org.apache.pekko.http.scaladsl.Http
-  import system.dispatcher
-
-  def start(): Unit = {
+  design.build[interface.controller.WorkbookController] { controller =>
     val bindingFuture =
-      Http().newServerAt("localhost", 8080).bind(todoController.route)
-    println("サーバーはhttp://localhost:8080/ で起動しています。")
-    sys.addShutdownHook {
-      bindingFuture
-        .flatMap(_.unbind())
-        .onComplete(_ => system.terminate())
+      Http().newServerAt("localhost", 8080).bind(controller.route)
+
+    bindingFuture.onComplete {
+      case Success(binding) =>
+        val address = binding.localAddress
+        println(
+          s"Server online at http://${address.getHostName}:${address.getPort}/"
+        )
+      case Failure(ex) =>
+        println(
+          s"Failed to bind HTTP endpoint, terminating system: ${ex.getMessage}"
+        )
+        system.terminate()
     }
   }
 }
